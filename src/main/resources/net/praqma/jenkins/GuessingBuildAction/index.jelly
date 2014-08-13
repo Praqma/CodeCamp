@@ -1,0 +1,8 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+    <html>
+        <h3>One Build Action</h3>
+        <!-- In index the build action is referenced by the jelly ${it} consequently when you just put in ${it} here jenkins will render whatever is in the build actions toString method -->
+        <p>${it}</p>
+    </html>
+</j:jelly>   
