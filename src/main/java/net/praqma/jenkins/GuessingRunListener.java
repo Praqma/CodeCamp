@@ -25,10 +25,12 @@
 package net.praqma.jenkins;
 
 import hudson.Extension;
-import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
+import hudson.model.AbstractBuild;
 import hudson.model.listeners.RunListener;
+
 import java.net.UnknownHostException;
+import java.util.Collection;
 
 /**
  *
@@ -40,16 +42,19 @@ public class GuessingRunListener extends RunListener<AbstractBuild<?,?>> {
     @Override
     public void onCompleted(AbstractBuild<?,?> r, TaskListener tl) {
         try {
-            GuessingBuildAction action = r.getAction(GuessingBuildAction.class);
-            GuessingDataStorageProvider.getInstance().store(action);
-            tl.getLogger().println(action);
-            tl.getLogger().println(String.format("%s answers stored in total", GuessingDataStorageProvider.getInstance().count()));
-            tl.getLogger().println(String.format("%s correct answers", GuessingDataStorageProvider.getInstance().countCorrect()));
-            tl.getLogger().println(String.format("%s incorrect answers", GuessingDataStorageProvider.getInstance().countIncorrect()));
-            super.onCompleted(r, tl); //To change body of generated methods, choose Tools | Templates.
+            Collection<GuessingBuildAction> actions = r.getActions(GuessingBuildAction.class);
+            GuessingDataStorageProvider storage = GuessingDataStorageProvider.getInstance();
+			for (GuessingBuildAction action : actions) {
+                storage.store(action);
+                tl.getLogger().println(action);
+			}
+            tl.getLogger().println(String.format("%s answers stored in total", storage.count()));
+            tl.getLogger().println(String.format("%s correct answers", storage.countCorrect()));
+            tl.getLogger().println(String.format("%s incorrect answers", storage.countIncorrect()));
+            super.onCompleted(r, tl);
         } catch (UnknownHostException ex) {
             ex.printStackTrace(tl.getLogger());
         }
     }
-    
+
 }
