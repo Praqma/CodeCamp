@@ -63,7 +63,7 @@ public class GuessingBuilder extends Builder {
     public static class FirstBuilderImpl extends BuildStepDescriptor<Builder> {
 
         /**
-         * This is used to determine if this build step is applicable for your chosen projec type. (FreeStyle, MultiConfiguration, Maven) 
+         * This is used to determine if this build step is applicable for your chosen project type. (FreeStyle, MultiConfiguration, Maven)
          * Some plugin build steps might be made to be only available to MultiConfiguration projects.
          * 
          * Required. In our example we require the project to be a free-style project.
@@ -118,17 +118,14 @@ public class GuessingBuilder extends Builder {
         List<ParametersAction> actions = build.getActions(ParametersAction.class);
         
         if(actions.isEmpty()) {
-            guess = new Random().nextInt(upper)+lower;
+            guess = new Random().nextInt(upper - lower + 1)+lower;
         } else {        
             for(ParametersAction act : actions) {
                 guess = Integer.parseInt(act.getParameter("guess").createVariableResolver(build).resolve("guess"));
             }        
         }
         
-        int random = new Random().nextInt(upper)+lower;        
-
-        //Simple commands can be done with launcher, workspace manipulation is better done with a FileCallable on the build object.
-        int res = launcher.decorateByEnv(build.getEnvironment(listener)).launch().cmds("cmd", "/C", "\"set\"").stdout(listener).join();
+        int random = new Random().nextInt(upper - lower + 1)+lower;
                 
         //Add the action to jenkins. This way we can reuse the data.
         build.addAction(new GuessingBuildAction(guess, random, guess == random));
