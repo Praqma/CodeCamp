@@ -3,3 +3,6 @@ target/
 *.iml
 work/
 nbactions.xml
+.classpath
+.project
+.settings
