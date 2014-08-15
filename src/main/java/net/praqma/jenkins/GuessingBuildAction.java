@@ -25,34 +25,38 @@ package net.praqma.jenkins;
 
 import hudson.model.Action;
 
+import java.util.Random;
+
 /**
  *
  * A class representing an action performed in a build step(It can be used in all parts of the build).
  * These actions are added to the build. These actions can contain business logic, data etc.
  * Builds can have multiple actions of the same type.
- * 
+ *
  * This data can the be extracted for use in the various views that Jenkins offers.
- * 
+ *
  * In our example we will re-use the same action through the entire build pipeline.
- * 
+ *
  * @author Praqma
  */
 public class GuessingBuildAction implements Action {
-    
+
+	private int index;
     private int guess;
     private int number;
     private boolean correct;
-    
+
     public GuessingBuildAction() { }
-    
-    public GuessingBuildAction(int guess, int number, boolean correct) {
+
+    public GuessingBuildAction(int index, int guess, int number, boolean correct) {
+    	this.index = index;
         this.guess = guess;
         this.number = number;
         this.correct = correct;
     }
-    
+
      /**
-     * 
+     *
      * @return the path to the icon file to be used by jenkins. If null, no link will be generated
      */
     @Override
@@ -62,12 +66,12 @@ public class GuessingBuildAction implements Action {
 
     @Override
     public String getDisplayName() {
-        return "Guess";
+        return "Guess "+index;
     }
 
     @Override
     public String getUrlName() {
-        return "guess";
+        return "guess" + index;
     }
 
     /**

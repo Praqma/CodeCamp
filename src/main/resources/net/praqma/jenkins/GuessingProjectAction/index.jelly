@@ -3,6 +3,6 @@
     <html>
         <h2>Latests guess</h2>
         <!-- In index the project action is referenced by the jelly ${it} -->
-        ${it.getLastBuildAction()}
+        ${it.lastBuildActions}
     </html>
-</j:jelly>   
+</j:jelly>

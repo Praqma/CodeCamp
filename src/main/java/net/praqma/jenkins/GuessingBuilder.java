@@ -25,18 +25,17 @@ package net.praqma.jenkins;
 
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Action;
-import hudson.model.BuildListener;
 import hudson.model.ParametersAction;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -44,20 +43,20 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * which has a perform method we will use. Additionally all {@link hudson.tasks.BuildStep}s have a prebuild method to
  * override, which runs before the build step.
  *
- * The main purpose of this example builder is to extract environment information from the executing slaves, and make 
+ * The main purpose of this example builder is to extract environment information from the executing slaves, and make
  * this data available for the view we wish to present it in.
- * 
+ *
  * During execution we re-use already added actions, and add the discovered data to the already existing build action.
- * 
+ *
  * @author Praqma
  */
 public class GuessingBuilder extends Builder {
 
-    public final Integer lower,upper;
-    
+	public final Integer lower,upper;
+
     /**
      * Required static constructor. This is used to create 'One Project Builder' BuildStep in the list-box item on your jobs
-     * configuration page. 
+     * configuration page.
      */
     @Extension
     public static class FirstBuilderImpl extends BuildStepDescriptor<Builder> {
@@ -65,9 +64,9 @@ public class GuessingBuilder extends Builder {
         /**
          * This is used to determine if this build step is applicable for your chosen project type. (FreeStyle, MultiConfiguration, Maven)
          * Some plugin build steps might be made to be only available to MultiConfiguration projects.
-         * 
+         *
          * Required. In our example we require the project to be a free-style project.
-         * 
+         *
          * @param proj The current project
          * @return a boolean indicating whether this build step can be chose given the project type
          */
@@ -77,17 +76,17 @@ public class GuessingBuilder extends Builder {
         }
         /**
          * Required method.
-         * 
+         *
          * @return The text to be displayed when selecting your BuildStep, in the project
          */
         @Override
         public String getDisplayName() {
             return "Guess a number";
-        }        
+        }
     }
-    
+
     @DataBoundConstructor
-    public GuessingBuilder(final Integer lower, final Integer upper) { 
+    public GuessingBuilder(final Integer lower, final Integer upper) {
         this.upper = upper;
         this.lower = lower;
     }
@@ -110,34 +109,36 @@ public class GuessingBuilder extends Builder {
      * @throws IOException
      */
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {        
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
         listener.getLogger().println(String.format("Guessing a number between %s and %s", lower, upper));
-        
+
         int guess = -1;
-        
+
         List<ParametersAction> actions = build.getActions(ParametersAction.class);
-        
+
         if(actions.isEmpty()) {
             guess = new Random().nextInt(upper - lower + 1)+lower;
-        } else {        
+        } else {
             for(ParametersAction act : actions) {
                 guess = Integer.parseInt(act.getParameter("guess").createVariableResolver(build).resolve("guess"));
-            }        
+            }
         }
-        
+
         int random = new Random().nextInt(upper - lower + 1)+lower;
-                
+
         //Add the action to jenkins. This way we can reuse the data.
-        build.addAction(new GuessingBuildAction(guess, random, guess == random));
-        
+        int currentGuessingBuildActions = build.getActions(GuessingBuildAction.class).size();
+        build.addAction(new GuessingBuildAction(currentGuessingBuildActions + 1, guess, random, guess == random));
+
+        // Add a GuessingRecorder if not already done
+        AbstractProject<?,?> project = build.getProject();
+		if(project.getPublishersList().getAll(GuessingRecorder.class).isEmpty()) {
+			project.getPublishersList().add(new GuessingRecorder());
+			project.save();
+        }
+
         //Fail build if our guess was correct.
         return guess == random;
     }
 
-    @Override
-    public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
-        return Collections.singleton(new GuessingProjectAction(project));
-    }
-    
-    
 }
