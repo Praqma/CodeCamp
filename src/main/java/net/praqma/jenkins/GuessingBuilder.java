@@ -137,8 +137,8 @@ public class GuessingBuilder extends Builder {
 			project.save();
         }
 
-        //Fail build if our guess was correct.
-        return guess == random;
+        //return true (we summarize results in post build)
+        return true;
     }
 
 }

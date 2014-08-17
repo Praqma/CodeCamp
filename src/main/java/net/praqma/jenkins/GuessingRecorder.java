@@ -25,15 +25,15 @@ package net.praqma.jenkins;
 
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
-import hudson.model.Action;
 import hudson.model.AbstractProject;
+import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Recorder;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class GuessingRecorder extends Recorder {
 
@@ -45,7 +45,22 @@ public class GuessingRecorder extends Recorder {
 	@Override
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
 			BuildListener listener) throws InterruptedException, IOException {
-		return true;
+        
+        List<GuessingBuildAction> actions = build.getActions(GuessingBuildAction.class);
+        int succes = 0;
+        int failure = 0;
+        for(GuessingBuildAction a : actions) {
+            if(!a.isCorrect()) {
+                failure++;
+            } else{
+                succes++;
+            } 
+                
+        }
+        listener.getLogger().println(String.format("%s correct gueesses out of a total of %s guesses", succes, failure));
+        
+        return failure == 0;
+        
 	}
 
 	@Override
