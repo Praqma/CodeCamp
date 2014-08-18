@@ -91,30 +91,27 @@ public class GuessingProjectAction implements ProminentProjectAction {
         return GuessingDataStorageProvider.getInstance().countCorrect();
     }
 
-    public int getLocalIncorrect() {
-        int cnt = 0;
-        for( AbstractBuild<?, ?> b = project.getLastCompletedBuild() ; b != null ; b = b.getPreviousBuild() ) {
-            GuessingBuildAction action = b.getAction( GuessingBuildAction.class );
-            if( action != null ) {
-                if(!action.isCorrect()) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
-    }
-
     public int getLocalCorrect() {
-        int cnt = 0;
-        for( AbstractBuild<?, ?> b = project.getLastCompletedBuild() ; b != null ; b = b.getPreviousBuild() ) {
-            GuessingBuildAction action = b.getAction( GuessingBuildAction.class );
-            if( action != null ) {
-                if(action.isCorrect()) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
+    	return getLocalCorrectIncorrect()[0];
     }
 
+
+    public int getLocalIncorrect() {
+    	return getLocalCorrectIncorrect()[1];
+    }
+
+    private int[] getLocalCorrectIncorrect() {
+        int correctCnt = 0, incorrectCnt = 0;
+        for( AbstractBuild<?, ?> b = project.getLastCompletedBuild() ; b != null ; b = b.getPreviousBuild() ) {
+            Collection<GuessingBuildAction> actions = b.getActions( GuessingBuildAction.class );
+            for (GuessingBuildAction action : actions) {
+            	if (action.isCorrect()) {
+            		correctCnt++;
+            	} else {
+            		incorrectCnt++;
+            	}
+            }
+        }
+        return new int[] { correctCnt, incorrectCnt };
+    }
 }
