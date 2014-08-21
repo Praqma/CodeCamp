@@ -39,8 +39,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class GuessingRecorder extends Recorder {
+    
+    @DataBoundConstructor
+    public GuessingRecorder() {
+        
+    }
     
     @Extension
     public static class GuessingRecorderDescriptorImpl extends BuildStepDescriptor<Publisher> {
