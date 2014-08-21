@@ -41,7 +41,6 @@ public class GuessingRunListener extends RunListener<AbstractBuild<?,?>> {
 
     @Override
     public void onCompleted(AbstractBuild<?,?> r, TaskListener tl) {
-        try {
             Collection<GuessingBuildAction> actions = r.getActions(GuessingBuildAction.class);
             GuessingDataStorageProvider storage = GuessingDataStorageProvider.getInstance();
 			for (GuessingBuildAction action : actions) {
@@ -52,9 +51,6 @@ public class GuessingRunListener extends RunListener<AbstractBuild<?,?>> {
             tl.getLogger().println(String.format("%s correct answers", storage.countCorrect()));
             tl.getLogger().println(String.format("%s incorrect answers", storage.countIncorrect()));
             super.onCompleted(r, tl);
-        } catch (UnknownHostException ex) {
-            ex.printStackTrace(tl.getLogger());
-        }
     }
 
 }
