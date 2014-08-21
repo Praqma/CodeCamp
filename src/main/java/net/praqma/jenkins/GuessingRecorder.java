@@ -25,15 +25,16 @@ package net.praqma.jenkins;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,6 +57,21 @@ public class GuessingRecorder extends Recorder {
         
     }
 
+	@Extension
+	public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
+
+		@Override
+		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+			return true;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return "Guessing status";
+		}
+
+	}
+
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
 		return BuildStepMonitor.NONE;
@@ -64,7 +80,7 @@ public class GuessingRecorder extends Recorder {
 	@Override
 	public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
 			BuildListener listener) throws InterruptedException, IOException {
-        
+
         List<GuessingBuildAction> actions = build.getActions(GuessingBuildAction.class);
         int succes = 0;
         int failure = 0;
@@ -73,12 +89,11 @@ public class GuessingRecorder extends Recorder {
                 failure++;
             } else{
                 succes++;
-            } 
-                
+            }
+
         }
         
-        listener.getLogger().println(String.format("%s correct gueesses out of a total of %s guesses", succes, failure));
-        
+        listener.getLogger().println(String.format("%s correct guesses out of a total of %s guesses", succes, failure));
         
         if(succes >= failure) {
             return true;
