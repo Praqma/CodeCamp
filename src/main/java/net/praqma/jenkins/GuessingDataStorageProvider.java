@@ -42,14 +42,14 @@ public class GuessingDataStorageProvider {
     private static GuessingDataStorageProvider instance;
     private static final String COLLECTIONNAME = "guesses";
     private static final int PORT = 27017;
-    private final MongoClient client;
+    //private final MongoClient client;
     
     
-    private GuessingDataStorageProvider() throws UnknownHostException {
-        client = new MongoClient("localhost", PORT);        
+    private GuessingDataStorageProvider() {
+        //client = new MongoClient("localhost", PORT);        
     }
     
-    public static GuessingDataStorageProvider getInstance() throws UnknownHostException {
+    public static GuessingDataStorageProvider getInstance() {
         
         if(instance == null) {
             instance = new GuessingDataStorageProvider();
@@ -59,35 +59,46 @@ public class GuessingDataStorageProvider {
     }
     
     private DB getDb() {
-        return client.getDB(COLLECTIONNAME);
+        //return client.getDB(COLLECTIONNAME);
+        return null;
     }
     
     public int count() {
+        /*
         JacksonDBCollection<GuessingBuildAction, String> coll = JacksonDBCollection.wrap(getDb().getCollection(COLLECTIONNAME), GuessingBuildAction.class, String.class);        
         return coll.find().count();
+        */
+        return 0;
     }
     
     public int countCorrect() {
         int count = 0;
+        /*
         JacksonDBCollection<GuessingBuildAction, String> coll = JacksonDBCollection.wrap(getDb().getCollection(COLLECTIONNAME), GuessingBuildAction.class, String.class);        
         DBCursor<GuessingBuildAction> actions = coll.find(new BasicDBObject("correct", true));
         count = actions.count();
+                
         actions.close();
+                */
         return count;
     }
     
     public int countIncorrect() {
         int count = 0;
+        /*
         JacksonDBCollection<GuessingBuildAction, String> coll = JacksonDBCollection.wrap(getDb().getCollection(COLLECTIONNAME), GuessingBuildAction.class, String.class);        
         DBCursor<GuessingBuildAction> actions = coll.find(new BasicDBObject("correct", false));
         count = actions.count();
         actions.close();
+                */
         return count;
     }
     
     public void store(GuessingBuildAction action) {
+        /*
         JacksonDBCollection<GuessingBuildAction, String> coll = JacksonDBCollection.wrap(getDb().getCollection(COLLECTIONNAME), GuessingBuildAction.class, String.class);
-        WriteResult<GuessingBuildAction, String> result = coll.insert(action);                                
+        WriteResult<GuessingBuildAction, String> result = coll.insert(action);
+                */
     }
     
 }
