@@ -31,12 +31,14 @@ import hudson.model.AbstractProject;
 import hudson.model.ParametersAction;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+import hudson.util.FormValidation;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
 
 /**
  * The Builder for our project. We extend from Builder which implements BuildStep,
@@ -82,6 +84,13 @@ public class GuessingBuilder extends Builder {
         @Override
         public String getDisplayName() {
             return "Guess a number";
+        }
+        
+        public FormValidation doCheckUpper(@QueryParameter Integer upper) {
+            if(upper > 6) {
+                return FormValidation.error("Has to be between 1 and 6");
+            }
+            return FormValidation.ok();
         }
     }
 

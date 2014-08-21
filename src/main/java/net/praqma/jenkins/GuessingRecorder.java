@@ -23,12 +23,16 @@
  */
 package net.praqma.jenkins;
 
+import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.BuildListener;
+import hudson.model.Result;
+import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import java.io.IOException;
 import java.util.Collection;
@@ -36,6 +40,21 @@ import java.util.Collections;
 import java.util.List;
 
 public class GuessingRecorder extends Recorder {
+    
+    @Extension
+    public static class GuessingRecorderDescriptorImpl extends BuildStepDescriptor<Publisher> {
+
+        @Override
+        public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+            return true; //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public String getDisplayName() {
+            return "Guessing game aggregator"; //To change body of generated methods, choose Tools | Templates.
+        }
+        
+    }
 
 	@Override
 	public BuildStepMonitor getRequiredMonitorService() {
@@ -57,10 +76,16 @@ public class GuessingRecorder extends Recorder {
             } 
                 
         }
+        
         listener.getLogger().println(String.format("%s correct gueesses out of a total of %s guesses", succes, failure));
         
-        return failure == 0;
         
+        if(succes >= failure) {
+            return true;
+        } else {
+            build.setResult(Result.UNSTABLE);
+            return true;        
+        }
 	}
 
 	@Override
