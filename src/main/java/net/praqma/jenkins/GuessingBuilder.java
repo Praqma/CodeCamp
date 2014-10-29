@@ -76,9 +76,9 @@ public class GuessingBuilder extends Builder {
         public boolean isApplicable(Class<? extends AbstractProject> proj) {
             return true;
         }
+        
         /**
-         * Required method.
-         *
+         * Required method.         
          * @return The text to be displayed when selecting your BuildStep, in the project
          */
         @Override
@@ -86,14 +86,51 @@ public class GuessingBuilder extends Builder {
             return "Guess a number";
         }
         
-        public FormValidation doCheckUpper(@QueryParameter Integer upper) {
+        /**
+         * Form validate the lower bound configuration setting
+         * @param upper
+         * @param lower
+         * @return 
+         */
+        public FormValidation doCheckLower(@QueryParameter Integer upper, @QueryParameter Integer lower) {
+            
+            if(lower != null &&  (lower < 1 || lower > 6 )) {
+                return FormValidation.error("Has to be between 1 and 6");
+            }
+                        
+            if((upper != null && lower != null) && lower > upper) {
+                return FormValidation.error("Lower bound is higher than upper bound");
+            }
+            
+            return FormValidation.ok();
+        }
+        
+        /**
+         * Form validate the upper bound configuration setting
+         * @param upper
+         * @param lower
+         * @return 
+         */
+        public FormValidation doCheckUpper(@QueryParameter Integer upper, @QueryParameter Integer lower) {
+            
             if(upper != null && upper > 6) {
                 return FormValidation.error("Has to be between 1 and 6");
             }
+                        
+            if((upper != null && lower != null) && upper < lower) {
+                return FormValidation.error("Upper bound is lower than the specified lower bound");
+            }
+            
             return FormValidation.ok();
         }
     }
 
+    /**
+     * Our builder currently has 2 configuration parameters. Upper and lowerbound
+     * 
+     * @param lower
+     * @param upper 
+     */
     @DataBoundConstructor
     public GuessingBuilder(final Integer lower, final Integer upper) {
         this.upper = upper;

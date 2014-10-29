@@ -48,21 +48,6 @@ public class GuessingRecorder extends Recorder {
         
     }
     
-    @Extension
-    public static class GuessingRecorderDescriptorImpl extends BuildStepDescriptor<Publisher> {
-
-        @Override
-        public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-            return true; 
-        }
-
-        @Override
-        public String getDisplayName() {
-            return "Guessing game aggregator";
-        }
-        
-    }
-
 	@Extension
 	public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
