@@ -99,7 +99,7 @@ public class GuessingRecorder extends Recorder {
 
         }
         
-        listener.getLogger().println(String.format("%s correct guesses out of a total of %s guesses", succes, failure));
+        listener.getLogger().println(String.format("%s correct guesses out of a total of %s guesses", succes, succes+failure));
         
         if(succes >= failure) {
             return true;

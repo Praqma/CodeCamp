@@ -83,14 +83,6 @@ public class GuessingProjectAction implements ProminentProjectAction {
         return b == null ? null : b.getActions(GuessingBuildAction.class);
     }
 
-    public int getIncorrect() throws UnknownHostException {
-        return GuessingDataStorageProvider.getInstance().countIncorrect();
-    }
-
-    public int getCorrect() throws UnknownHostException {
-        return GuessingDataStorageProvider.getInstance().countCorrect();
-    }
-
     public int getLocalCorrect() {
     	return getLocalCorrectIncorrect()[0];
     }

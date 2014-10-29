@@ -1,10 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">    
-    <h3>Guessing game global statistics</h3>
-    <!-- In floatingBox, the project action is referenced by the jelly ${from} -->
-    <p>Correct guesses: ${from.getCorrect()}</p>
-    <p>Incorrect gueeses: ${from.getIncorrect()} </p>
-    
     <h3>Guessing game local statistics</h3>   
     <p>Correct guesses: ${from.getLocalCorrect()}</p>
     <p>Incorrect gueeses: ${from.getLocalIncorrect()} </p>

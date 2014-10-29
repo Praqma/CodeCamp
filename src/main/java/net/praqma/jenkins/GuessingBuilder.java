@@ -61,7 +61,7 @@ public class GuessingBuilder extends Builder {
      * configuration page.
      */
     @Extension
-    public static class FirstBuilderImpl extends BuildStepDescriptor<Builder> {
+    public static class GuessingBuilderImpl extends BuildStepDescriptor<Builder> {
 
         /**
          * This is used to determine if this build step is applicable for your chosen project type. (FreeStyle, MultiConfiguration, Maven)
@@ -87,7 +87,7 @@ public class GuessingBuilder extends Builder {
         }
         
         public FormValidation doCheckUpper(@QueryParameter Integer upper) {
-            if(upper > 6) {
+            if(upper != null && upper > 6) {
                 return FormValidation.error("Has to be between 1 and 6");
             }
             return FormValidation.ok();

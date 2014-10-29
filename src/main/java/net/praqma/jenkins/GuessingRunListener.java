@@ -29,7 +29,6 @@ import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.model.listeners.RunListener;
 
-import java.net.UnknownHostException;
 import java.util.Collection;
 
 /**
@@ -39,17 +38,23 @@ import java.util.Collection;
 @Extension
 public class GuessingRunListener extends RunListener<AbstractBuild<?,?>> {
 
+    private static int countCorrect = 0;
+    private static int countIncorrect = 0;
+    
     @Override
     public void onCompleted(AbstractBuild<?,?> r, TaskListener tl) {
+        
             Collection<GuessingBuildAction> actions = r.getActions(GuessingBuildAction.class);
-            GuessingDataStorageProvider storage = GuessingDataStorageProvider.getInstance();
 			for (GuessingBuildAction action : actions) {
-                storage.store(action);
-                tl.getLogger().println(action);
+                if(action.isCorrect()) {
+                    countCorrect++;
+                } else {
+                    countIncorrect++;
+                }
 			}
-            tl.getLogger().println(String.format("%s answers stored in total", storage.count()));
-            tl.getLogger().println(String.format("%s correct answers", storage.countCorrect()));
-            tl.getLogger().println(String.format("%s incorrect answers", storage.countIncorrect()));
+            tl.getLogger().println(String.format("%s answers in total while running", countCorrect+countIncorrect));
+            tl.getLogger().println(String.format("%s correct answers", countCorrect));
+            tl.getLogger().println(String.format("%s incorrect answers", countIncorrect));
             super.onCompleted(r, tl);
     }
 
