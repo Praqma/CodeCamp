@@ -25,7 +25,6 @@ package net.praqma.jenkins;
 
 import hudson.model.Action;
 
-import java.util.Random;
 
 /**
  *
@@ -57,7 +56,7 @@ public class GuessingBuildAction implements Action {
 
      /**
      *
-     * @return the path to the icon file to be used by jenkins. If null, no link will be generated
+     * @return the path to the icon file to be used by Jenkins. If null, no link will be generated
      */
     @Override
     public String getIconFileName() {

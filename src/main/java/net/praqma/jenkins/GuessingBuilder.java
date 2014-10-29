@@ -105,7 +105,7 @@ public class GuessingBuilder extends Builder {
      * to add your actions, and/or perform the operations required by your plugin in this build step. Equally, it is up
      * to the developer to make the code run on the slave(master or an actual remote). This must be done given the builds
      * workspace, as in build.getWorkspace(). The workspace is the link to the slave, as it is the representation of the
-     * remotes file system.
+     * remote file system.
      *
      * Build steps as you add them to your job configuration are executed sequentially, and the return value for your
      * builder should indicate whether to execute the next build step in the list.
@@ -113,7 +113,7 @@ public class GuessingBuilder extends Builder {
      * @param build the current build
      * @param launcher the current launcher
      * @param listener the build listener
-     * @return a boolean indicating wheather to proceed with the next buildstep
+     * @return a boolean indicating whether to proceed with the next build step
      * @throws InterruptedException
      * @throws IOException
      */

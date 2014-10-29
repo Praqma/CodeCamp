@@ -53,12 +53,12 @@ public class GuessingRecorder extends Recorder {
 
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> jobType) {
-            return true; //To change body of generated methods, choose Tools | Templates.
+            return true; 
         }
 
         @Override
         public String getDisplayName() {
-            return "Guessing game aggregator"; //To change body of generated methods, choose Tools | Templates.
+            return "Guessing game aggregator";
         }
         
     }

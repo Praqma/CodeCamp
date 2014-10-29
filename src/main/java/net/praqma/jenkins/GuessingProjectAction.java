@@ -28,7 +28,6 @@ import hudson.model.ProminentProjectAction;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 
-import java.net.UnknownHostException;
 import java.util.Collection;
 
 /**
@@ -48,6 +47,7 @@ public class GuessingProjectAction implements ProminentProjectAction {
     public int incorrect;
     /**
      * If this method returns null, no icon will be used and the link will not be visible
+     * @return 
      */
     @Override
     public String getIconFileName() {
