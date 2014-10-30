@@ -171,6 +171,8 @@ public class GuessingBuilder extends Builder {
         }
 
         int random = new Random().nextInt(upper - lower + 1)+lower;
+        
+        
 
         //Add the action to jenkins. This way we can reuse the data.
         int currentGuessingBuildActions = build.getActions(GuessingBuildAction.class).size();
@@ -182,6 +184,9 @@ public class GuessingBuilder extends Builder {
 			project.getPublishersList().add(new GuessingRecorder());
 			project.save();
         }
+        
+        listener.getLogger().println("You guessed "+guess);
+        listener.getLogger().println("Jenkins rolled "+random);
 
         //return true (we summarize results in post build)
         return true;

@@ -45,6 +45,7 @@ public class GuessingProjectAction implements ProminentProjectAction {
     public final AbstractProject<?,?> project;
     public int correct;
     public int incorrect;
+    
     /**
      * If this method returns null, no icon will be used and the link will not be visible
      * @return the path to the icon we want to use for our project action. 
