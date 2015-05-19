@@ -60,7 +60,7 @@ public class GuessingBuildWrapper extends BuildWrapper {
 
         @Override
         public String getDisplayName() {
-            return "Invoking build wrapper for GuessingGame";
+            return "GuessingGame build wrapper";
         }
 
 
